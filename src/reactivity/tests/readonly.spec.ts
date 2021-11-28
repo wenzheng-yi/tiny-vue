@@ -1,4 +1,4 @@
-import { readonly } from "../reactive"
+import { isReadonly, readonly } from "../reactive"
 
 describe("reaonly", () => {
   it("happy path", () => {
@@ -6,6 +6,8 @@ describe("reaonly", () => {
     const wrapped = readonly(original)
     expect(wrapped).not.toBe(original)
     expect(wrapped.foo).toBe(1)
+    expect(isReadonly(wrapped)).toBe(true)
+    expect(isReadonly(original)).toBe(false)
   })
 
   it("wran when call set", () => {
