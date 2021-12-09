@@ -28,8 +28,6 @@ class RefImpl {
   }
 }
 
-
-
 export function ref(raw) {
   return new RefImpl(raw)
 }
