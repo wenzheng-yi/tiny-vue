@@ -26,7 +26,7 @@ class RefImpl {
     }
   }
 }
-function  trackRefEffects(ref) {
+function trackRefEffects(ref) {
   if (isTracking()) {
     trackEffects(ref.dep)
   }
@@ -43,5 +43,20 @@ export function isRef(value) {
 }
 
 export function unRef(ref) {
-  return isRef(ref)? ref.value : ref
+  return isRef(ref) ? ref.value : ref
+}
+
+export function proxyRefs(objectWidthRefs) {
+  return new Proxy(objectWidthRefs, {
+    get(target, key) {
+      return unRef(Reflect.get(target, key))
+    },
+    set(target, key, value) {
+      if (isRef(target[key]) && !isRef(value)) {
+        return target[key].value = value
+      } else {
+        return Reflect.set(target, key, value)
+      }
+    }
+  })
 }
