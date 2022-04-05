@@ -16,7 +16,7 @@ export function setupComponent(instance) {
 
 function setupStatefulComponent(instance) {
   const Component = instance.type
-  
+
   const { setup } = Component
 
   if (setup) {
@@ -36,9 +36,7 @@ function handleSetupResult(instance, setupResult) {
 
 function finishComponentSetup(instance) {
   const Component = instance.type
-
-  if (!Component.render) {
-    instance.render = Component.render
-  }
+  
+  instance.render = Component.render
 }
 

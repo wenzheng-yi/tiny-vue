@@ -3,8 +3,9 @@ import { createVNode } from "./vnode"
 
 export function createApp(rootComponent) {
   return {
-    mount(rootContainer) {
-      const vnode = createVNode(rootComponent)
+    mount(rootContainerId) {
+      const rootContainer = document.querySelector(rootContainerId)
+      const vnode = createVNode(rootContainer)
       render(vnode, rootContainer)
     }
   }
