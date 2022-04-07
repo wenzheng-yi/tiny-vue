@@ -13,6 +13,9 @@ vue3的简单实现，学习参考 [mini-vue](https://github.com/cuixiaorui/mini
 - [x] ref 功能
 - [x] isRef、unRef 工具函数
 - [x] proxyRefs 功能
+- [x] computed 计算属性
+- [x] component 初始化的主流程
+- [x] rollup 打包配置
 
 目前已编写的文档：
 
