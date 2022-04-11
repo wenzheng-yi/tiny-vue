@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "build": "rollup -c rollup.config.js"
+    "build": "rollup -c rollup.config.js --watch"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
