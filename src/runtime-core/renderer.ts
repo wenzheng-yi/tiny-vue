@@ -18,9 +18,10 @@ function processElement(vnode, container) {
 }
 
 function mountElement(vnode, container) {
-  const el = document.createElement(vnode.type)
+  // 这个虚拟节点是属于element的
+  const el = (vnode.el = document.createElement(vnode.type))
 
-  // children
+  // 对子组件进行解析
   const { children } = vnode
   if (typeof children === 'string') {
     el.textContent = children
@@ -28,7 +29,7 @@ function mountElement(vnode, container) {
     mountChildren(vnode, el)
   }
 
-  // props
+  // 对props进行解析
   const { props } = vnode
   for (const key in props) {
     el.setAttribute(key, props[key])
@@ -47,15 +48,19 @@ function processComponent(vnode, container) {
   mountComponent(vnode, container)
 }
 
-function mountComponent(vnode, container) {
-  const instance = createComponentInstance(vnode)
+function mountComponent(initialVnode, container) {
+  const instance = createComponentInstance(initialVnode)
 
   setupComponent(instance)
-  setupRenderEffect(instance, container)
+  setupRenderEffect(instance,initialVnode, container)
 }
 
-function setupRenderEffect(instance, container) {
-  const subTree = instance.render()
+function setupRenderEffect(instance,initialVNode, container) {
+  const { proxy } = instance
+  const subTree = instance.render.call(proxy)
 
   patch(subTree, container)
+
+  // 要在所有element挂载完之后，把根元素的el挂载到组件的虚拟节点上
+  initialVNode.el = subTree.el
 }

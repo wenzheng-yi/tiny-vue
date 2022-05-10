@@ -16,6 +16,8 @@ vue3的简单实现，学习参考 [mini-vue](https://github.com/cuixiaorui/mini
 - [x] computed 计算属性
 - [x] component 初始化的主流程
 - [x] rollup 打包配置
+- [x] 初始化element流程
+- [x] 组件代理对象
 
 目前已编写的文档：
 
