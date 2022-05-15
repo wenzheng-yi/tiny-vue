@@ -18,6 +18,7 @@ vue3的简单实现，学习参考 [mini-vue](https://github.com/cuixiaorui/mini
 - [x] rollup 打包配置
 - [x] 初始化element流程
 - [x] 组件代理对象
+- [x] 实现shapeFlags
 
 目前已编写的文档：
 
