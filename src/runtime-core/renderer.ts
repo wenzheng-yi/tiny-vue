@@ -1,4 +1,4 @@
-import { isObject } from '../shared'
+import { isObject, isOn } from '../shared'
 import { ShapeFlags } from '../shared/ShapeFlags'
 import { createComponentInstance, setupComponent } from './component'
 
@@ -34,7 +34,14 @@ function mountElement(vnode, container) {
   // 对props进行解析
   const { props } = vnode
   for (const key in props) {
-    el.setAttribute(key, props[key])
+    const val = props[key]
+    // 事件注册
+    if(isOn(key)) {
+      const event = key.slice(2).toLowerCase()
+      el.addEventListener(event, val)
+    } else {
+      el.setAttribute(key, val)
+    }
   }
 
   container.append(el)

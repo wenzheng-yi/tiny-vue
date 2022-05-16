@@ -19,6 +19,7 @@ vue3的简单实现，学习参考 [mini-vue](https://github.com/cuixiaorui/mini
 - [x] 初始化element流程
 - [x] 组件代理对象
 - [x] 实现shapeFlags
+- [x] 实现事件注册
 
 目前已编写的文档：
 

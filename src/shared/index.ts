@@ -7,3 +7,5 @@ export const isObject = (val) => {
 export const hasChanged = (newVal, val) => {
   return !Object.is(newVal, val)
 }
+
+export const isOn = (val) => /^on[A-Z]/.test(val)
