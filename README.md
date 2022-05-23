@@ -20,6 +20,7 @@ vue3的简单实现，学习参考 [mini-vue](https://github.com/cuixiaorui/mini
 - [x] 组件代理对象
 - [x] 实现shapeFlags
 - [x] 实现事件注册
+- [x] 实现组件props逻辑
 
 目前已编写的文档：
 
