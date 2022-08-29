@@ -1,20 +1,23 @@
-import { shallowReadonly } from "../reactivity/reactive"
-import { initProps } from "./componentProps"
-import { PublicInstanceProxyHandlers } from "./componentPublicInstance"
+import { shallowReadonly } from '../reactivity/reactive'
+import { emit } from './componentEmit'
+import { initProps } from './componentProps'
+import { PublicInstanceProxyHandlers } from './componentPublicInstance'
 
 export function createComponentInstance(vnode) {
   const component = {
     vnode,
     type: vnode.type,
     setupState: {},
-    props: {}
+    props: {},
+    emit: () => {},
   }
-
+  // bind的作用：默认emit的第一个参数是组件实例。
+  // 用户在调用emit时就可以只传事件名称，不用传父组件实例了。
+  component.emit = emit.bind(null, component) as any
   return component
 }
 
 export function setupComponent(instance) {
-  // TODO
   initProps(instance, instance.vnode.props)
   // initSlots()
   setupStatefulComponent(instance)
@@ -29,7 +32,9 @@ function setupStatefulComponent(instance) {
   const { setup } = Component
 
   if (setup) {
-    const setupResult = setup(shallowReadonly(instance.props))
+    const setupResult = setup(shallowReadonly(instance.props), {
+      emit: instance.emit,
+    })
     handleSetupResult(instance, setupResult)
   }
 }
@@ -47,4 +52,3 @@ function finishComponentSetup(instance) {
 
   instance.render = Component.render
 }
-
