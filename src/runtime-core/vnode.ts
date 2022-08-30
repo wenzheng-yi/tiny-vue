@@ -9,13 +9,18 @@ export function createVNode(type, props?, children?) {
     el: null
   }
 
-  // children
+  // 对children进行标识
   if (typeof children === "string") {
     vnode.shapeFlags |= ShapeFlags.TEXT_CHILDREN
   } else if (Array.isArray(children)) {
     vnode.shapeFlags |= ShapeFlags.ARRAY_CHILDREN 
   }
 
+  if(vnode.shapeFlags & ShapeFlags.STATEFUL_COMPONENT) {
+    if(typeof children === 'object') {
+      vnode.shapeFlags |= ShapeFlags.SLOT_CHILDREN
+    }
+  }
   return vnode
 }
 
