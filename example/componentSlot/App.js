@@ -1,4 +1,4 @@
-import { h } from '../../lib/tiny-vue.esm.js'
+import { h, createTextVNode } from '../../lib/tiny-vue.esm.js'
 import { Foo } from './Foo.js'
 export const App = {
   name: 'App',
@@ -8,7 +8,10 @@ export const App = {
       Foo,
       {},
       {
-        header: ({type}) => h('p', {}, 'header ' + type),
+        header: ({ type }) => [
+          h('p', {}, 'header ' + type),
+          createTextVNode('创建了text节点'),
+        ],
         footer: () => h('p', {}, 'footer'),
       }
     )
