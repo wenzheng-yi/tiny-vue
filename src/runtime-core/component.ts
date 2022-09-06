@@ -4,7 +4,8 @@ import { initProps } from './componentProps'
 import { PublicInstanceProxyHandlers } from './componentPublicInstance'
 import { initSlots } from './componentSlots'
 
-export function createComponentInstance(vnode) {
+export function createComponentInstance(vnode, parent) {
+  console.log('createComponent', parent)
   const component = {
     vnode,
     type: vnode.type,
@@ -12,6 +13,8 @@ export function createComponentInstance(vnode) {
     props: {},
     emit: () => {},
     slots: {},
+    provides: parent ? parent.provides : {},
+    parent,
   }
   // bind的作用：默认emit的第一个参数是组件实例。
   // 用户在调用emit时就可以只传事件名称，不用传父组件实例了。
