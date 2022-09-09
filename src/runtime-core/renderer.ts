@@ -5,7 +5,11 @@ import { createAppAPI } from './createApp'
 import { Fragment, Text } from './vnode'
 
 export function createRenderer(options) {
-  const { createElement, patchProp, insert } = options
+  const {
+    createElement: hostCreateElement,
+    patchProp: hostPatchProp,
+    insert: hostInsert,
+  } = options
   function render(vnode, container) {
     patch(vnode, container, null)
   }
@@ -44,7 +48,7 @@ export function createRenderer(options) {
 
   function mountElement(vnode, container, parentComponent) {
     // 这个虚拟节点是属于element的
-    const el = (vnode.el = createElement(vnode.type))
+    const el = (vnode.el = hostCreateElement(vnode.type))
 
     // 对子组件进行解析
     const { children, shapeFlags } = vnode
@@ -59,10 +63,10 @@ export function createRenderer(options) {
     for (const key in props) {
       const val = props[key]
       // 事件注册
-      patchProp(el, key, val)
+      hostPatchProp(el, key, val)
     }
 
-    insert(el, container)
+    hostInsert(el, container)
   }
 
   function mountChildren(vnode, container, parentComponent) {
@@ -93,6 +97,6 @@ export function createRenderer(options) {
   }
 
   return {
-    createApp: createAppAPI(render)
+    createApp: createAppAPI(render),
   }
 }
