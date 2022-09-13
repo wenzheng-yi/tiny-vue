@@ -1,25 +1,29 @@
 import { extend } from '../shared'
 
-let activeEffect;
-let shouldTrack;
+let activeEffect
+let shouldTrack = false
 
 export class ReactiveEffect {
   private _fn: any
   deps = []
   active = true
   onStop?: () => void
-  constructor(fn, public scheduler?) {
+  public scheduler: Function | undefined
+  constructor(fn, scheduler?: Function) {
     this._fn = fn
+    this.scheduler = scheduler
   }
   run() {
     if (!this.active) {
-      return this._fn();
+      return this._fn()
     }
 
+    // 应该收集
     shouldTrack = true
     activeEffect = this
-
     const result = this._fn()
+
+    // 重置
     shouldTrack = false
 
     return result
@@ -39,7 +43,7 @@ function cleanupEffect(effect) {
   effect.deps.forEach((dep: any) => {
     dep.delete(effect)
   })
-  // TODO 为什么把length设为0
+
   // 把 effect.deps 清空
   effect.deps.length = 0
 }
@@ -88,7 +92,6 @@ export function triggerEffects(dep) {
 }
 
 export function effect(fn, options: any = {}) {
-  // fn
   const { scheduler } = options
   const _effect = new ReactiveEffect(fn, scheduler)
 
