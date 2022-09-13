@@ -1,6 +1,6 @@
 {
-    "editor.tabSize": 2,
-    "cSpell.words": [
-        "vnode"
-    ]
+  "editor.tabSize": 2,
+  "cSpell.words": ["vnode"],
+  // 保存时格式化代码
+  "editor.formatOnSave": true
 }
