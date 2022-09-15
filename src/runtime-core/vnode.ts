@@ -8,7 +8,7 @@ export function createVNode(type, props?, children?) {
     type,
     props,
     children,
-    shapeFlags: getShapeFlag(type),
+    shapeFlag: getShapeFlag(type),
     el: null,
     subTree: {},
     isMounted: false,
@@ -16,14 +16,14 @@ export function createVNode(type, props?, children?) {
 
   // 对children进行标识
   if (typeof children === 'string') {
-    vnode.shapeFlags |= ShapeFlags.TEXT_CHILDREN
+    vnode.shapeFlag |= ShapeFlags.TEXT_CHILDREN
   } else if (Array.isArray(children)) {
-    vnode.shapeFlags |= ShapeFlags.ARRAY_CHILDREN
+    vnode.shapeFlag |= ShapeFlags.ARRAY_CHILDREN
   }
 
-  if (vnode.shapeFlags & ShapeFlags.STATEFUL_COMPONENT) {
+  if (vnode.shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
     if (typeof children === 'object') {
-      vnode.shapeFlags |= ShapeFlags.SLOT_CHILDREN
+      vnode.shapeFlag |= ShapeFlags.SLOT_CHILDREN
     }
   }
   return vnode

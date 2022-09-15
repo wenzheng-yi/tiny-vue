@@ -18,7 +18,7 @@ export function createRenderer(options) {
   // n1 -> 老的vnode
   // n2 -> 新的vnode
   function patch(n1, n2, container, parentComponent) {
-    const { type, shapeFlags } = n2
+    const { type, shapeFlag } = n2
     switch (type) {
       case Fragment:
         processFragment(n1, n2, container, parentComponent)
@@ -27,9 +27,9 @@ export function createRenderer(options) {
         processText(n1, n2, container)
         break
       default:
-        if (shapeFlags & ShapeFlags.ELEMENT) {
+        if (shapeFlag & ShapeFlags.ELEMENT) {
           processElement(n1, n2, container, parentComponent)
-        } else if (shapeFlags & ShapeFlags.STATEFUL_COMPONENT) {
+        } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
           processComponent(n1, n2, container, parentComponent)
         }
         break
@@ -91,10 +91,10 @@ export function createRenderer(options) {
     const el = (vnode.el = hostCreateElement(vnode.type))
 
     // 对子组件进行解析
-    const { children, shapeFlags } = vnode
-    if (shapeFlags & ShapeFlags.TEXT_CHILDREN) {
+    const { children, shapeFlag } = vnode
+    if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
       el.textContent = children
-    } else if (shapeFlags & ShapeFlags.ARRAY_CHILDREN) {
+    } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
       mountChildren(vnode, el, parentComponent)
     }
 

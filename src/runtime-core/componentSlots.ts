@@ -3,9 +3,9 @@ import { ShapeFlags } from '../shared/ShapeFlags'
 export function initSlots(instance, children) {
   // 判断是否具名插槽
   const { vnode } = instance
-  if (vnode.shapeFlags & ShapeFlags.SLOT_CHILDREN) {
+  if (vnode.shapeFlag & ShapeFlags.SLOT_CHILDREN) {
     normalizeObjectSlots(children, instance.slots)
-  } 
+  }
 }
 
 // 处理具名插槽
