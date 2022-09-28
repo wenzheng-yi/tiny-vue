@@ -158,6 +158,52 @@ export function createRenderer(options) {
         hostRemove(c1[i].el)
         i++
       }
+    } else {
+      // 中间对比
+      let s1 = i,
+        s2 = i
+      const keyToNewIndexMap = new Map() // 记录新children中间部分的节点index
+      for (let i = s2; i <= e2; i++) {
+        // 此处的 nextChild/prevChild 是相对于更新前、更新后
+        const nextChild = c2[i]
+        keyToNewIndexMap.set(nextChild.key, i)
+      }
+
+      const toBePatched = e2 - s2 + 1
+      let patched = 0
+      for (let i = s1; i <= e1; i++) {
+        const prevChild = c1[i]
+
+        // 如果新节点都被遍历完了，说明剩下的老节点都是不存在了的，直接删除
+        if (patched >= toBePatched) {
+          hostRemove(prevChild.el)
+          continue
+        }
+
+        let newIndex
+        // key 不为 null/undefined
+        if (prevChild.key != null) {
+          // 根据key去查找该节点在新数据中的位置
+          newIndex = keyToNewIndexMap.get(prevChild.key)
+        } else {
+          // 循环查找该节点在新数据中的位置
+          for (let j = s2; j < e2; j++) {
+            if (isSameVNodeType(prevChild, c2[j])) {
+              newIndex = j
+              break
+            }
+          }
+        }
+
+        // 如果新数据中没有该节点了，就把它删除
+        if (newIndex === undefined) {
+          hostRemove(prevChild.el)
+        } else {
+          // 如果存在，则对它继续深度遍历
+          patch(prevChild, c2[newIndex], container, parentComponent, null)
+          patched++
+        }
+      }
     }
   }
 
