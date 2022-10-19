@@ -2,6 +2,7 @@ import { effect } from '../reactivity'
 import { EMPTY_OBJ } from '../shared'
 import { ShapeFlags } from '../shared/ShapeFlags'
 import { createComponentInstance, setupComponent } from './component'
+import { shouldUpdateComponent } from './componentUpdateUtils'
 import { createAppAPI } from './createApp'
 import { Fragment, Text } from './vnode'
 
@@ -301,19 +302,37 @@ export function createRenderer(options) {
   }
 
   function processComponent(n1, n2, container, parentComponent, anchor) {
-    mountComponent(n2, container, parentComponent, anchor)
+    if (!n1) {
+      mountComponent(n2, container, parentComponent, anchor)
+    } else {
+      updateComponent(n1, n2)
+    }
   }
 
-  function mountComponent(initialVnode, container, parentComponent, anchor) {
-    const instance = createComponentInstance(initialVnode, parentComponent)
+  function updateComponent(n1, n2) {
+    const instance = (n2.component = n1.component)
+    if (shouldUpdateComponent(n1, n2)) {
+      instance.next = n2
+      instance.update()
+    } else {
+      n2.el = n1.el
+      instance.vnode = n2
+    }
+  }
+
+  function mountComponent(initialVNode, container, parentComponent, anchor) {
+    const instance = (initialVNode.component = createComponentInstance(
+      initialVNode,
+      parentComponent
+    ))
 
     setupComponent(instance)
-    setupRenderEffect(instance, initialVnode, container, anchor)
+    setupRenderEffect(instance, initialVNode, container, anchor)
   }
 
   function setupRenderEffect(instance, initialVNode, container, anchor) {
     // effect:在第一次执行render的时候收集依赖
-    effect(() => {
+    instance.update = effect(() => {
       if (!instance.isMounted) {
         console.log('init')
         const { proxy } = instance
@@ -327,6 +346,12 @@ export function createRenderer(options) {
         instance.isMounted = true
       } else {
         console.log('update')
+        // 需要新的虚拟节点
+        const { next, vnode } = instance
+        if (next) {
+          next.el = vnode.el
+          updateComponentPreRender(instance, next)
+        }
         const { proxy } = instance
         const subTree = instance.render.call(proxy)
         const prevSubTree = instance.subTree
@@ -340,6 +365,12 @@ export function createRenderer(options) {
   return {
     createApp: createAppAPI(render),
   }
+}
+
+function updateComponentPreRender(instance, nextVNode) {
+  instance.vnode = nextVNode
+  instance.next = null
+  instance.props = nextVNode.props
 }
 
 function getSequence(arr) {
