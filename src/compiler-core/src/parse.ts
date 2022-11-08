@@ -5,7 +5,7 @@ const enum TagType {
 }
 export function baseParse(content: string) {
   const context = createParserContext(content)
-  return createRoot(parseChildren(context))
+  return createRoot(parseChildren(context, []))
 }
 function createParserContext(content: string) {
   return {
@@ -17,22 +17,38 @@ function createRoot(children) {
     children,
   }
 }
-function parseChildren(context): any {
+function parseChildren(context, ancestors): any {
   const nodes: any = []
-  let node
+
+  while (!isEnd(context, ancestors)) {
+    let node
+    const s = context.source
+    if (s.startsWith('{{')) {
+      node = parseInterpolation(context)
+    } else if (s[0] === '<') {
+      if (/[a-z]/i.test(s[1])) {
+        node = parseElement(context, ancestors)
+      }
+    }
+    if (!node) {
+      node = parseText(context)
+    }
+    nodes.push(node)
+  }
+
+  return nodes
+}
+function isEnd(context, ancestors) {
   const s = context.source
-  if (s.startsWith('{{')) {
-    node = parseInterpolation(context)
-  } else if (s[0] === '<') {
-    if (/[a-z]/i.test(s[1])) {
-      node = parseElement(context)
+  // 1、遇到结束标签
+  for (let i = ancestors.length - 1; i >= 0; i--) {
+    const tag = ancestors[i].tag
+    if (startsWithEndTagOpen(s, tag)) {
+      return true
     }
   }
-  if (!node) {
-    node = parseText(context)
-  }
-  nodes.push(node)
-  return nodes
+  // 2、source没有值的时候
+  return !s
 }
 function parseInterpolation(context) {
   const openDelimiter = '{{'
@@ -58,12 +74,28 @@ function parseInterpolation(context) {
 function advanceBy(context: any, length) {
   context.source = context.source.slice(length)
 }
-function parseElement(context: any) {
-  const element = parseTag(context, TagType.START)
-  parseTag(context, TagType.END)
+function parseElement(context: any, ancestors) {
+  const element: any = parseTag(context, TagType.START)
+  ancestors.push(element)
+  element.children = parseChildren(context, ancestors)
+  ancestors.pop()
+
+  if (startsWithEndTagOpen(context.source, element.tag)) {
+    parseTag(context, TagType.END)
+  } else {
+    throw new Error(`缺少结束标签${element.tag}`)
+  }
 
   return element
 }
+
+function startsWithEndTagOpen(source: any, tag: any) {
+  return (
+    source.startsWith('</') &&
+    source.slice(2, 2 + tag.length).toLowerCase() === tag.toLowerCase()
+  )
+}
+
 function parseTag(context: any, type: TagType) {
   // 1. 解析tag
   const match: any = /^<\/?([a-z]*)/i.exec(context.source)
@@ -71,7 +103,6 @@ function parseTag(context: any, type: TagType) {
   // 2. 删除处理完成的代码
   advanceBy(context, match[0].length)
   advanceBy(context, 1)
-  console.log(context.source)
   if (type === TagType.END) return
   return {
     type: NodeTypes.ELEMENT,
@@ -79,7 +110,16 @@ function parseTag(context: any, type: TagType) {
   }
 }
 function parseText(context: any): any {
-  const content = parseTextData(context, context.source.length)
+  let endIndex = context.source.length
+  let endTokens = ['<', '{{']
+  for (let i = 0; i < endTokens.length; i++) {
+    const index = context.source.indexOf(endTokens[i])
+    if (index !== -1 && endIndex > index) {
+      endIndex = index
+    }
+  }
+  const content = parseTextData(context, endIndex)
+
   return {
     type: NodeTypes.TEXT,
     content,
