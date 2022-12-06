@@ -69,7 +69,7 @@ function genText(node: any, context: any) {
 function genElement(node, context) {
   const { push, helper } = context
   const { tag, children, props } = node
-  push(`${helper(CREATE_ELEMENT_VNODE)}(`)
+  push(`_${helper(CREATE_ELEMENT_VNODE)}(`)
   genNodeList(genNullable([tag, props, children]), context)
   push(')')
 }

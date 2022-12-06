@@ -6,7 +6,6 @@ import { PublicInstanceProxyHandlers } from './componentPublicInstance'
 import { initSlots } from './componentSlots'
 
 export function createComponentInstance(vnode, parent) {
-  console.log('createComponent', parent)
   const component = {
     vnode,
     type: vnode.type,
@@ -60,6 +59,13 @@ function handleSetupResult(instance, setupResult) {
 
 function finishComponentSetup(instance) {
   const Component = instance.type
+
+  if (compiler && !Component.render) {
+    if (Component.template) {
+      Component.render = compiler(Component.template)
+    }
+  }
+
   instance.render = Component.render
 }
 
@@ -69,4 +75,9 @@ export function getCurrentInstance() {
 }
 function setCurrentInstance(value) {
   currentInstance = value
+}
+
+let compiler
+export function registerRuntimeCompiler(_compiler) {
+  compiler = _compiler
 }
