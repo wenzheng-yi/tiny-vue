@@ -1,20 +1,18 @@
 import pkg from './package.json'
 import typescript from '@rollup/plugin-typescript'
 export default {
-  input: './src/index.ts',
+  input: './packages/vue/src/index.ts',
   output: [
     // cjs -> commonjs
     // 在项目中进行包查找时，cjs情况下默认查找main，esm默认查找module
     {
       format: 'cjs',
-      file: pkg.main
+      file: './packages/vue/dist/tiny-vue.cjs.js',
     },
     {
       format: 'es',
-      file: pkg.module
-    }
+      file: './packages/vue/dist/tiny-vue.esm.js',
+    },
   ],
-  plugins: [
-    typescript()
-  ]
+  plugins: [typescript()],
 }
