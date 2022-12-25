@@ -1,5 +1,5 @@
-import { h } from "../../lib/tiny-vue.esm.js";
-import { Foo } from "./Foo.js"
+import { h } from '../../dist/tiny-vue.esm.js'
+import { Foo } from './Foo.js'
 window.self = null
 export const App = {
   render() {
@@ -8,18 +8,15 @@ export const App = {
       'div',
       {
         id: 'root',
-        class: ["yellow", "green"],
+        class: ['yellow', 'green'],
         onClick() {
           console.log('click')
         },
         onMousedown() {
           console.log('mousedown')
-        }
+        },
       },
-      [
-        h('div', {}, 'hi,' + this.msg),
-        h(Foo, { count: 1 })
-      ]
+      [h('div', {}, 'hi,' + this.msg), h(Foo, { count: 1 })]
       // [
       //   h("p", { class: "yellow" }, "你好"),
       //   h("p", { class: "green" }, "tiny-vue")
@@ -29,7 +26,7 @@ export const App = {
 
   setup() {
     return {
-      msg: 'tiny-vue,ni hao'
+      msg: 'tiny-vue,ni hao',
     }
-  }
+  },
 }

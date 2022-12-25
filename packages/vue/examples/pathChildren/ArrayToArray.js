@@ -1,7 +1,7 @@
 // 老的是 array
 // 新的是 array
 
-import { ref, h } from '../../lib/tiny-vue.esm.js'
+import { ref, h } from '../../dist/tiny-vue.esm.js'
 
 // 1. 左侧的对比
 // (a b) c

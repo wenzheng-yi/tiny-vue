@@ -1,4 +1,4 @@
-import { h, ref } from '../../lib/tiny-vue.esm.js'
+import { h, ref } from '../../dist/tiny-vue.esm.js'
 
 const nextChildren = [h('div', {}, 'A'), h('div', {}, 'B')]
 const prevChildren = 'oldChildren'

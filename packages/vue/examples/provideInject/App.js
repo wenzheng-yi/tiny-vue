@@ -1,4 +1,4 @@
-import { h, provide, inject } from '../../lib/tiny-vue.esm.js'
+import { h, provide, inject } from '../../dist/tiny-vue.esm.js'
 
 const Provider = {
   name: 'Provider',

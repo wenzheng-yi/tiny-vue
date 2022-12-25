@@ -1,4 +1,4 @@
-import { h, getCurrentInstance } from '../../lib/tiny-vue.esm.js'
+import { h, getCurrentInstance } from '../../dist/tiny-vue.esm.js'
 export const Foo = {
   name: 'Foo',
   setup() {

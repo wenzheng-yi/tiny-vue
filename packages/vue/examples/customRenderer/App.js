@@ -1,4 +1,4 @@
-import { h } from '../../lib/tiny-vue.esm.js'
+import { h } from '../../dist/tiny-vue.esm.js'
 export const App = {
   setup() {
     return {

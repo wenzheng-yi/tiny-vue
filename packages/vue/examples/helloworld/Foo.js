@@ -1,10 +1,10 @@
-import { h } from '../../lib/tiny-vue.esm.js'
+import { h } from '../../dist/tiny-vue.esm.js'
 export const Foo = {
-  setup(props){
+  setup(props) {
     console.log('Foo的props', props)
     props.count++
   },
-  render(){
+  render() {
     return h('div', {}, 'Foo:' + this.count)
-  }
+  },
 }

@@ -1,4 +1,4 @@
-import { h } from '../../lib/tiny-vue.esm.js'
+import { h } from '../../dist/tiny-vue.esm.js'
 import { Foo } from './Foo.js'
 window.self = null
 export const App = {
@@ -13,7 +13,7 @@ export const App = {
       [
         h('div', {}, 'hi,' + this.msg),
         h(Foo, {
-          onAdd(a,b) {
+          onAdd(a, b) {
             console.log('来自foo组件的onAdd事件', a, b)
           },
           onAddFoo(c, d) {

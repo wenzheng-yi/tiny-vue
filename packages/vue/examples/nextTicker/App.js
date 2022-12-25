@@ -1,4 +1,9 @@
-import { getCurrentInstance, h, ref, nextTick } from '../../lib/tiny-vue.esm.js'
+import {
+  getCurrentInstance,
+  h,
+  ref,
+  nextTick,
+} from '../../dist/tiny-vue.esm.js'
 export const App = {
   name: 'App',
   setup() {

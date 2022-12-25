@@ -1,4 +1,4 @@
-import { h, renderSlots } from '../../lib/tiny-vue.esm.js'
+import { h, renderSlots } from '../../dist/tiny-vue.esm.js'
 export const Foo = {
   setup() {
     return {}
@@ -8,7 +8,7 @@ export const Foo = {
     console.log(this.$slots)
     return h('div', {}, [
       renderSlots(this.$slots, 'header', {
-        type: 'good'
+        type: 'good',
       }),
       foo,
       renderSlots(this.$slots, 'footer'),

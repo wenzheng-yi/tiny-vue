@@ -2,7 +2,7 @@ import {
   h,
   createTextVNode,
   getCurrentInstance,
-} from '../../lib/tiny-vue.esm.js'
+} from '../../dist/tiny-vue.esm.js'
 import { Foo } from './Foo.js'
 export const App = {
   name: 'App',
